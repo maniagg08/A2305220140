@@ -1,0 +1,62 @@
+API Calls:
+
+// services/api.js
+import axios from 'axios';
+
+const BASE_URL = 'http://20.244.56.144/train';
+
+export const getTrains = async () => {
+  const response = await axios.get(`${BASE_URL}/trains`, {
+    headers: {
+      Authorization: 'Bearer YOUR_AUTH_TOKEN',
+    },
+  });
+  return response.data;
+};
+
+Components: 
+
+// components/AllTrains.js
+import React, { useEffect, useState } from 'react';
+import { getTrains } from '../services/api';
+
+const AllTrains = () => {
+  const [trains, setTrains] = useState([]);
+
+  useEffect(() => {
+    const fetchTrains = async () => {
+      const trainData = await getTrains();
+      setTrains(trainData);
+    };
+    fetchTrains();
+  }, []);
+
+  return (
+    <div>
+      {/* Display the list of trains */}
+    </div>
+  );
+};
+
+export default AllTrains;
+
+Routing:
+
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import AllTrains from './components/AllTrains';
+import SingleTrain from './components/SingleTrain';
+
+const App = () => {
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/" component={AllTrains} />
+        <Route path="/train/:id" component={SingleTrain} />
+      </Switch>
+    </Router>
+  );
+};
+
+export default App;
